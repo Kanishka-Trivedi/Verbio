@@ -19,7 +19,7 @@ function Sidebar() {
                 </Link>
             </div>
 
-            <nav className="flex-1 p-4 space-y-1">
+            {/* <nav className="flex-1 p-4 space-y-1">
                 <Link
                     to="/"
                     className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${currentPath === "/" ? "btn-active" : ""
@@ -46,7 +46,43 @@ function Sidebar() {
                     <BellIcon className="size-5 text-base-content opacity-70" />
                     <span>Notifications</span>
                 </Link>
+            </nav> */}
+
+            <nav className="flex-1 p-4 space-y-1">
+                <Link
+                    to="/"
+                    className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case transition-colors duration-200 ${currentPath === "/"
+                            ? "bg-primary/20 text-primary font-semibold rounded-lg"
+                            : "hover:bg-base-200"
+                        }`}
+                >
+                    <HomeIcon className={`size-5 ${currentPath === "/" ? "text-primary" : "text-base-content opacity-70"}`} />
+                    <span>Home</span>
+                </Link>
+
+                <Link
+                    to="/friends"
+                    className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case transition-colors duration-200 ${currentPath === "/friends"
+                            ? "bg-primary/20 text-primary font-semibold rounded-lg"
+                            : "hover:bg-base-200"
+                        }`}
+                >
+                    <UsersIcon className={`size-5 ${currentPath === "/friends" ? "text-primary" : "text-base-content opacity-70"}`} />
+                    <span>Friends</span>
+                </Link>
+
+                <Link
+                    to="/notifications"
+                    className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case transition-colors duration-200 ${currentPath === "/notifications"
+                            ? "bg-primary/20 text-primary font-semibold rounded-lg"
+                            : "hover:bg-base-200"
+                        }`}
+                >
+                    <BellIcon className={`size-5 ${currentPath === "/notifications" ? "text-primary" : "text-base-content opacity-70"}`} />
+                    <span>Notifications</span>
+                </Link>
             </nav>
+
 
             {/* USER PROFILE SECTION */}
             <div className="p-4 border-t border-base-300 mt-auto">
