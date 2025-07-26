@@ -37,9 +37,9 @@ export async function signup(req, res) {
             await upsertStreamUser({
                 id: newUser._id.toString(),
                 name: newUser.fullName,
-                image: newUser.profilePic, 
+                image: newUser.profilePic,
             });
-           console.log(`Stream user created for ${newUser.fullName}`);
+            console.log(`Stream user created for ${newUser.fullName}`);
         } catch (error) {
             console.error("Error creating Stream user:", error);
         }
@@ -49,8 +49,8 @@ export async function signup(req, res) {
         res.cookie("jwt", token, {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
-            sameSite: "strict",
-            secure: process.env.NODE_ENV === "production",
+            sameSite: "none",    // <-- Important for cross-site requests
+            secure: true,        // <-- Always true on Render (HTTPS)
         });
 
         res.status(201).json({ success: true, user: newUser });
@@ -84,8 +84,8 @@ export async function login(req, res) {
         res.cookie("jwt", token, {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
-            sameSite: "strict",
-            secure: process.env.NODE_ENV === "production",
+            sameSite: "none",    // <-- Important for cross-site requests
+            secure: true,        // <-- Always true on Render (HTTPS)
         });
 
         res.status(200).json({ success: true, user });
@@ -108,7 +108,7 @@ export async function onboard(req, res) {
         const { fullName, bio, nativeLanguage, learningLanguage, location } = req.body;
 
         if (!fullName || !bio || !nativeLanguage || !learningLanguage || !location) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 message: "All fields are required",
                 missingFields: [
                     !fullName && "fullName",
@@ -133,20 +133,20 @@ export async function onboard(req, res) {
             return res.status(404).json({ message: "User not found" });
         }
 
-      try {
+        try {
             await upsertStreamUser({
-            id: updatedUser._id.toString(),
-            name: updatedUser.fullName,
-            image: updatedUser.profilePic,
-            bio: updatedUser.bio,
-            nativeLanguage: updatedUser.nativeLanguage,
-            learningLanguage: updatedUser.learningLanguage,
-            location: updatedUser.location
-        });
-        console.log(`Stream user updated for ${updatedUser.fullName}`);
-      } catch (streamError) {
-         console.log("Error updating stream user during onboarding:", streamError.message);
-      }
+                id: updatedUser._id.toString(),
+                name: updatedUser.fullName,
+                image: updatedUser.profilePic,
+                bio: updatedUser.bio,
+                nativeLanguage: updatedUser.nativeLanguage,
+                learningLanguage: updatedUser.learningLanguage,
+                location: updatedUser.location
+            });
+            console.log(`Stream user updated for ${updatedUser.fullName}`);
+        } catch (streamError) {
+            console.log("Error updating stream user during onboarding:", streamError.message);
+        }
 
         res.status(200).json({ success: true, user: updatedUser });
     } catch (error) {
