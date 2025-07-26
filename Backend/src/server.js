@@ -19,7 +19,8 @@ const PORT = process.env.PORT
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://verbio-1.onrender.com"
+  "https://verbio-1.onrender.com",
+  "https://verbio.netlify.app"
 ];
 
 app.use(cors({
