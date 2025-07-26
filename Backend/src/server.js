@@ -11,11 +11,28 @@ import {connectDB} from './lib/db.js';
 const app = express();
 const PORT = process.env.PORT 
 
+// app.use(cors({
+//     origin: ["http://localhost:5173", "https://verbio-1.onrender.com"],
+//     credentials: true, 
+// })
+// );
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://verbio-1.onrender.com"
+];
+
 app.use(cors({
-    origin: ["http://localhost:5173", "https://verbio-1.onrender.com"],
-    credentials: true, 
-})
-);
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS not allowed for this origin"));
+    }
+  },
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 
