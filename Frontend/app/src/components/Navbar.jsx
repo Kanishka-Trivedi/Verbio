@@ -11,7 +11,7 @@ function Navbar() {
   const location = useLocation();
   const isChatPage = location.pathname?.startsWith("/chat");
 
-const {logoutMutation} = useLogout();
+  const { logoutMutation } = useLogout();
 
   return (
     <nav className="bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 flex items-center">
@@ -37,11 +37,12 @@ const {logoutMutation} = useLogout();
           {/* TODO */}
           <ThemeSelector />
 
-          <div className="avatar">
-            <div className="w-7 rounded-full">
-              <img src={authUser?.profilePic} alt="User Avatar" rel="noreferrer" />
+          <Link to="/profile" className="avatar">
+            <div className="w-7 mx-2 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 hover:scale-105 transition">
+              <img src={authUser?.profilePic} alt="User Avatar" />
             </div>
-          </div>
+          </Link>
+
 
           {/* Logout button */}
           <button className="btn btn-ghost btn-circle" onClick={logoutMutation}>
