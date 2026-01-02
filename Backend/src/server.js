@@ -73,7 +73,7 @@ const PORT = process.env.PORT || 5001;
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://verbio-1.onrender.com",
+  "https://verbio-vygl.onrender.com",
   "https://verbio.netlify.app"
 ];
 
