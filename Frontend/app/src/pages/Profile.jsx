@@ -1,3 +1,189 @@
+// import React, { useState, useEffect } from "react";
+// import useAuthUser from "../hooks/useAuthUser";
+// import { CameraIcon, UserPlus2 } from "lucide-react";
+// import { useMutation } from '@tanstack/react-query';
+// import axios from "axios";
+// const API = import.meta.env.VITE_API_BASE_URL;
+
+
+// // Hook: Update profile
+// const useUpdateProfile = () => {
+//   return useMutation({
+//     mutationFn: async (data) => {
+//       const response = await axios.put(`${API}/users/profile`, data, {
+//         withCredentials: true,
+//       });
+//       return response.data;
+//     },
+//   });
+// };
+
+
+// // Hook: Upload profile pic
+// const useUploadProfilePic = () =>
+//   useMutation(async (formData) => {
+//     const response = await axios.post(`${API}/users/profile-pic`, formData, {
+//       headers: { "Content-Type": "multipart/form-data" },
+//       withCredentials: true,
+//     });
+//     return response.data;
+//   });
+
+// export default function Profile() {
+//   const { authUser, refetch } = useAuthUser();
+//   const [formData, setFormData] = useState({
+//     fullName: authUser?.fullName || "",
+//     nativeLanguage: authUser?.nativeLanguage || "",
+//     learningLanguage: authUser?.learningLanguage || "",
+//     location: authUser?.location || "",
+//     bio: authUser?.bio || "",
+//   });
+
+//   const [selectedImage, setSelectedImage] = useState(null);
+//   const updateProfile = useUpdateProfile();
+//   const uploadPic = useUploadProfilePic();
+
+//   const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+//   useEffect(() => {
+//     const updateStatus = () => setIsOnline(navigator.onLine);
+//     window.addEventListener("online", updateStatus);
+//     window.addEventListener("offline", updateStatus);
+//     return () => {
+//       window.removeEventListener("online", updateStatus);
+//       window.removeEventListener("offline", updateStatus);
+//     };
+//   }, []);
+
+//   const handleChange = (e) => {
+//     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+//   };
+
+//   const handleProfileSave = async () => {
+//     try {
+//       console.log("Submitting formData:", formData);
+//       await updateProfile.mutateAsync(formData);
+//       refetch();
+//       alert("Profile updated successfully!");
+//     } catch (error) {
+//       console.error("Update failed", error);
+//       alert("Update failed");
+//     }
+//   };
+
+//   const handleImageUpload = async (e) => {
+//     const file = e.target.files[0];
+//     if (!file) return;
+
+//     setSelectedImage(URL.createObjectURL(file));
+//     const formData = new FormData();
+//     formData.append("profilePic", file);
+
+//     try {
+//       await uploadPic.mutateAsync(formData);
+//       refetch();
+//       alert("Profile picture updated!");
+//     } catch (err) {
+//       console.error("Image upload failed", err);
+//       alert("Image upload failed");
+//     }
+//   };
+
+//   return (
+//     <div className="max-w-3xl mx-auto px-4 py-10">
+//       <h2 className="text-3xl font-bold mb-8 text-center text-primary">My Profile</h2>
+
+//       {/* Avatar Section */}
+//       <div className="flex justify-center mb-6 relative group">
+//         <label htmlFor="profile-pic" className="cursor-pointer">
+//           <div className="avatar">
+//             <div className="w-32 h-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 hover:scale-105 transition">
+//               <img
+//                 src={selectedImage || authUser?.profilePic || "/default.png"}
+//                 alt="Profile"
+//               />
+//             </div>
+//             <input
+//               type="file"
+//               id="profile-pic"
+//               className="hidden"
+//               accept="image/*"
+//               onChange={handleImageUpload}
+//             />
+//           </div>
+//           <div className="absolute bottom-2 right-[38%] bg-white p-1.5 rounded-full shadow">
+//             <CameraIcon className="h-5 w-5 text-primary" />
+//           </div>
+//         </label>
+//       </div>
+
+//       {/* Status & Friends */}
+//       <div className="flex justify-center gap-4 mb-8 text-sm">
+//         <div className={`px-4 py-1 rounded-full shadow-sm bg-base-200 text-${isOnline ? 'green-600' : 'red-500'} font-semibold`}>
+//           Status: {isOnline ? "Online" : "Offline"}
+//         </div>
+//         <div className="flex items-center gap-2 px-4 py-1 bg-primary/10 text-primary rounded-full shadow-sm font-medium">
+//           <UserPlus2 className="w-4 h-4" />
+//           Friends:
+//           <span className="bg-primary text-white rounded-full px-2 py-0.5 text-xs font-semibold">
+//             {authUser?.friends?.length || 0}
+//           </span>
+//         </div>
+//       </div>
+
+//       {/* Editable Fields */}
+//       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+//         {[
+//           { label: "Full Name", name: "fullName" },
+//           { label: "Native Language", name: "nativeLanguage" },
+//           { label: "Learning Language", name: "learningLanguage" },
+//           { label: "Location", name: "location" }
+//         ].map(({ label, name }) => (
+//           <div key={name}>
+//             <label className="block text-sm font-medium mb-1">{label}</label>
+//             <input
+//               type="text"
+//               name={name}
+//               className="input input-bordered w-full"
+//               value={formData[name]}
+//               onChange={handleChange}
+//             />
+//           </div>
+//         ))}
+
+//         <div className="sm:col-span-2">
+//           <label className="block text-sm font-medium mb-1">Bio</label>
+//           <textarea
+//             name="bio"
+//             rows="4"
+//             className="textarea textarea-bordered w-full"
+//             value={formData.bio}
+//             onChange={handleChange}
+//             placeholder="Write something about yourself..."
+//           />
+//         </div>
+//       </div>
+
+//       {/* Save Button */}
+//       <div className="text-center mt-10">
+//         <button
+//           className={`btn btn-primary px-8 text-white transition duration-300 hover:scale-105 ${updateProfile.isLoading && "loading"}`}
+//           onClick={handleProfileSave}
+//         >
+//           Save Changes
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
 // import React, { useState } from "react";
 // import useAuthUser from "../hooks/useAuthUser";
 // import { CameraIcon } from "lucide-react";
@@ -237,18 +423,205 @@
 
 
 
+// import React, { useState, useEffect } from "react";
+// import useAuthUser from "../hooks/useAuthUser";
+// import { CameraIcon, UserPlus2 } from "lucide-react";
+// import { useMutation } from '@tanstack/react-query';
+// import axios from "axios";
+// const API = import.meta.env.VITE_API_BASE_URL;
+
+
+// // Hook: Update profile
+// const useUpdateProfile = () => {
+//   return useMutation({
+//     mutationFn: async (data) => {
+//       const response = await axios.put(`${API}/users/profile`, data, {
+//         withCredentials: true,
+//       });
+//       return response.data;
+//     },
+//   });
+// };
+
+
+// // Hook: Upload profile pic
+// const useUploadProfilePic = () =>
+//   useMutation(async (formData) => {
+//     const response = await axios.post(`${API}/users/profile-pic`, formData, {
+//       headers: { "Content-Type": "multipart/form-data" },
+//       withCredentials: true,
+//     });
+//     return response.data;
+//   });
+
+// export default function Profile() {
+//   const { authUser, refetch } = useAuthUser();
+//   const [formData, setFormData] = useState({
+//     fullName: authUser?.fullName || "",
+//     nativeLanguage: authUser?.nativeLanguage || "",
+//     learningLanguage: authUser?.learningLanguage || "",
+//     location: authUser?.location || "",
+//     bio: authUser?.bio || "",
+//   });
+
+//   const [selectedImage, setSelectedImage] = useState(null);
+//   const updateProfile = useUpdateProfile();
+//   const uploadPic = useUploadProfilePic();
+
+//   const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+//   useEffect(() => {
+//     const updateStatus = () => setIsOnline(navigator.onLine);
+//     window.addEventListener("online", updateStatus);
+//     window.addEventListener("offline", updateStatus);
+//     return () => {
+//       window.removeEventListener("online", updateStatus);
+//       window.removeEventListener("offline", updateStatus);
+//     };
+//   }, []);
+
+//   const handleChange = (e) => {
+//     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+//   };
+
+//   const handleProfileSave = async () => {
+//     try {
+//       console.log("Submitting formData:", formData);
+//       await updateProfile.mutateAsync(formData);
+//       refetch();
+//       alert("Profile updated successfully!");
+//     } catch (error) {
+//       console.error("Update failed", error);
+//       alert("Update failed");
+//     }
+//   };
+
+//   const handleImageUpload = async (e) => {
+//     const file = e.target.files[0];
+//     if (!file) return;
+
+//     setSelectedImage(URL.createObjectURL(file));
+//     const formData = new FormData();
+//     formData.append("profilePic", file);
+
+//     try {
+//       await uploadPic.mutateAsync(formData);
+//       refetch();
+//       alert("Profile picture updated!");
+//     } catch (err) {
+//       console.error("Image upload failed", err);
+//       alert("Image upload failed");
+//     }
+//   };
+
+//   return (
+//     <div className="max-w-3xl mx-auto px-4 py-10">
+//       <h2 className="text-3xl font-bold mb-8 text-center text-primary">My Profile</h2>
+
+//       {/* Avatar Section */}
+//       <div className="flex justify-center mb-6 relative group">
+//         <label htmlFor="profile-pic" className="cursor-pointer">
+//           <div className="avatar">
+//             <div className="w-32 h-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 hover:scale-105 transition">
+//               <img
+//                 src={selectedImage || authUser?.profilePic || "/default.png"}
+//                 alt="Profile"
+//               />
+//             </div>
+//             <input
+//               type="file"
+//               id="profile-pic"
+//               className="hidden"
+//               accept="image/*"
+//               onChange={handleImageUpload}
+//             />
+//           </div>
+//           <div className="absolute bottom-2 right-[38%] bg-white p-1.5 rounded-full shadow">
+//             <CameraIcon className="h-5 w-5 text-primary" />
+//           </div>
+//         </label>
+//       </div>
+
+//       {/* Status & Friends */}
+//       <div className="flex justify-center gap-4 mb-8 text-sm">
+//         <div className={`px-4 py-1 rounded-full shadow-sm bg-base-200 text-${isOnline ? 'green-600' : 'red-500'} font-semibold`}>
+//           Status: {isOnline ? "Online" : "Offline"}
+//         </div>
+//         <div className="flex items-center gap-2 px-4 py-1 bg-primary/10 text-primary rounded-full shadow-sm font-medium">
+//           <UserPlus2 className="w-4 h-4" />
+//           Friends:
+//           <span className="bg-primary text-white rounded-full px-2 py-0.5 text-xs font-semibold">
+//             {authUser?.friends?.length || 0}
+//           </span>
+//         </div>
+//       </div>
+
+//       {/* Editable Fields */}
+//       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+//         {[
+//           { label: "Full Name", name: "fullName" },
+//           { label: "Native Language", name: "nativeLanguage" },
+//           { label: "Learning Language", name: "learningLanguage" },
+//           { label: "Location", name: "location" }
+//         ].map(({ label, name }) => (
+//           <div key={name}>
+//             <label className="block text-sm font-medium mb-1">{label}</label>
+//             <input
+//               type="text"
+//               name={name}
+//               className="input input-bordered w-full"
+//               value={formData[name]}
+//               onChange={handleChange}
+//             />
+//           </div>
+//         ))}
+
+//         <div className="sm:col-span-2">
+//           <label className="block text-sm font-medium mb-1">Bio</label>
+//           <textarea
+//             name="bio"
+//             rows="4"
+//             className="textarea textarea-bordered w-full"
+//             value={formData.bio}
+//             onChange={handleChange}
+//             placeholder="Write something about yourself..."
+//           />
+//         </div>
+//       </div>
+
+//       {/* Save Button */}
+//       <div className="text-center mt-10">
+//         <button
+//           className={`btn btn-primary px-8 text-white transition duration-300 hover:scale-105 ${updateProfile.isLoading && "loading"}`}
+//           onClick={handleProfileSave}
+//         >
+//           Save Changes
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
 import React, { useState, useEffect } from "react";
 import useAuthUser from "../hooks/useAuthUser";
 import { CameraIcon, UserPlus2 } from "lucide-react";
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
+const API = import.meta.env.VITE_API_BASE_URL;
 
-// Hook: Update profile
+/* ----------------------------------
+   Hook: Update profile
+----------------------------------- */
 const useUpdateProfile = () => {
   return useMutation({
     mutationFn: async (data) => {
-      const response = await axios.put("https://verbio-vygl.onrender.com/api/users/profile", data, {
+      const response = await axios.put(`${API}/users/profile`, data, {
         withCredentials: true,
       });
       return response.data;
@@ -256,33 +629,61 @@ const useUpdateProfile = () => {
   });
 };
 
-
-// Hook: Upload profile pic
-const useUploadProfilePic = () =>
-  useMutation(async (formData) => {
-    const response = await axios.post("https://verbio-vygl.onrender.com/api/users/profile-pic", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-      withCredentials: true,
-    });
-    return response.data;
+/* ----------------------------------
+   Hook: Upload profile picture
+----------------------------------- */
+const useUploadProfilePic = () => {
+  return useMutation({
+    mutationFn: async (formData) => {
+      const response = await axios.post(
+        `${API}/users/profile-pic`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    },
   });
+};
 
 export default function Profile() {
-  const { authUser, refetch } = useAuthUser();
+  const { authUser } = useAuthUser(); // ❌ removed refetch
+  const queryClient = useQueryClient(); // ✅ correct way
+
   const [formData, setFormData] = useState({
-    fullName: authUser?.fullName || "",
-    nativeLanguage: authUser?.nativeLanguage || "",
-    learningLanguage: authUser?.learningLanguage || "",
-    location: authUser?.location || "",
-    bio: authUser?.bio || "",
+    fullName: "",
+    nativeLanguage: "",
+    learningLanguage: "",
+    location: "",
+    bio: "",
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
   const updateProfile = useUpdateProfile();
   const uploadPic = useUploadProfilePic();
 
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  /* ----------------------------------
+     Sync form with authUser
+  ----------------------------------- */
+  useEffect(() => {
+    if (authUser) {
+      setFormData({
+        fullName: authUser.fullName || "",
+        nativeLanguage: authUser.nativeLanguage || "",
+        learningLanguage: authUser.learningLanguage || "",
+        location: authUser.location || "",
+        bio: authUser.bio || "",
+      });
+    }
+  }, [authUser]);
 
+  /* ----------------------------------
+     Online / Offline status
+  ----------------------------------- */
   useEffect(() => {
     const updateStatus = () => setIsOnline(navigator.onLine);
     window.addEventListener("online", updateStatus);
@@ -293,14 +694,27 @@ export default function Profile() {
     };
   }, []);
 
+  /* ----------------------------------
+     Input change handler
+  ----------------------------------- */
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
+  /* ----------------------------------
+     Save profile
+  ----------------------------------- */
   const handleProfileSave = async () => {
     try {
+      console.log("Submitting formData:", formData);
       await updateProfile.mutateAsync(formData);
-      refetch();
+
+      // ✅ Correct way to refresh auth user
+      queryClient.invalidateQueries(["authUser"]);
+
       alert("Profile updated successfully!");
     } catch (error) {
       console.error("Update failed", error);
@@ -308,17 +722,24 @@ export default function Profile() {
     }
   };
 
+  /* ----------------------------------
+     Upload profile picture
+  ----------------------------------- */
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     setSelectedImage(URL.createObjectURL(file));
+
     const formData = new FormData();
     formData.append("profilePic", file);
 
     try {
       await uploadPic.mutateAsync(formData);
-      refetch();
+
+      // ✅ Refresh auth user data
+      queryClient.invalidateQueries(["authUser"]);
+
       alert("Profile picture updated!");
     } catch (err) {
       console.error("Image upload failed", err);
@@ -328,7 +749,9 @@ export default function Profile() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-bold mb-8 text-center text-primary">My Profile</h2>
+      <h2 className="text-3xl font-bold mb-8 text-center text-primary">
+        My Profile
+      </h2>
 
       {/* Avatar Section */}
       <div className="flex justify-center mb-6 relative group">
@@ -356,9 +779,14 @@ export default function Profile() {
 
       {/* Status & Friends */}
       <div className="flex justify-center gap-4 mb-8 text-sm">
-        <div className={`px-4 py-1 rounded-full shadow-sm bg-base-200 text-${isOnline ? 'green-600' : 'red-500'} font-semibold`}>
+        <div
+          className={`px-4 py-1 rounded-full shadow-sm bg-base-200 font-semibold ${
+            isOnline ? "text-green-600" : "text-red-500"
+          }`}
+        >
           Status: {isOnline ? "Online" : "Offline"}
         </div>
+
         <div className="flex items-center gap-2 px-4 py-1 bg-primary/10 text-primary rounded-full shadow-sm font-medium">
           <UserPlus2 className="w-4 h-4" />
           Friends:
@@ -374,7 +802,7 @@ export default function Profile() {
           { label: "Full Name", name: "fullName" },
           { label: "Native Language", name: "nativeLanguage" },
           { label: "Learning Language", name: "learningLanguage" },
-          { label: "Location", name: "location" }
+          { label: "Location", name: "location" },
         ].map(({ label, name }) => (
           <div key={name}>
             <label className="block text-sm font-medium mb-1">{label}</label>
@@ -404,7 +832,9 @@ export default function Profile() {
       {/* Save Button */}
       <div className="text-center mt-10">
         <button
-          className={`btn btn-primary px-8 text-white transition duration-300 hover:scale-105 ${updateProfile.isLoading && "loading"}`}
+          className={`btn btn-primary px-8 text-white transition duration-300 hover:scale-105 ${
+            updateProfile.isLoading && "loading"
+          }`}
           onClick={handleProfileSave}
         >
           Save Changes

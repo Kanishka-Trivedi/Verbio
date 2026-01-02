@@ -146,3 +146,49 @@ export async function getOutgoingFriendReqs(req, res) {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
+
+// PUT /api/users/profile
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const updates = req.body;
+    console.log("Profile update data:", updates);
+    console.log("User ID:", userId);
+    
+    
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updates, {
+      new: true,
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Update profile error:", error);
+    res.status(500).json({ message: "Failed to update profile." });
+  }
+};
+
+
+// POST /api/users/profile-pic
+export const uploadProfilePic = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const base64Image = req.body.profilePic;
+
+    if (!base64Image) {
+      return res.status(400).json({ message: "No image provided." });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { profilePic: base64Image },
+      { new: true }
+    );
+
+    res.status(200).json({ message: "Profile picture updated", user });
+  } catch (error) {
+    console.error("Profile pic upload error:", error);
+    res.status(500).json({ message: "Failed to upload profile picture." });
+  }
+};

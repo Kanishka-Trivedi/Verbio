@@ -2,6 +2,8 @@ import { upsertStreamUser } from '../lib/stream.js';
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 export async function signup(req, res) {
     const { email, password, fullName } = req.body;
 
@@ -49,8 +51,9 @@ export async function signup(req, res) {
         res.cookie("jwt", token, {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
-            sameSite: "none",    // <-- Important for cross-site requests
-            secure: true,        // <-- Always true on Render (HTTPS)
+            path: '/', // <--- ADD THIS LINE
+sameSite: isProduction ? "none" : "lax", 
+            secure: isProduction,       // <-- Always true on Render (HTTPS)
         });
 
         res.status(201).json({ success: true, user: newUser });
@@ -84,9 +87,11 @@ export async function login(req, res) {
         res.cookie("jwt", token, {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
-            sameSite: "none",    // <-- Important for cross-site requests
-            secure: true,        // <-- Always true on Render (HTTPS)
+            path: '/', // <--- ADD THIS LINE
+            sameSite: isProduction ? "none" : "lax", 
+            secure: isProduction,       // <-- Always true on Render (HTTPS)
         });
+
 
         res.status(200).json({ success: true, user });
 
@@ -99,8 +104,9 @@ export async function login(req, res) {
 export async function logout(req, res) {
     res.clearCookie("jwt", {
         httpOnly: true,
-        sameSite: "none",
-        secure: true,
+        path: '/', // <--- ADD THIS LINE
+sameSite: isProduction ? "none" : "lax", 
+            secure: isProduction,
     });
     res.status(200).json({ success: true, message: "Logged out successfully" });
 }
