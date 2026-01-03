@@ -59,6 +59,7 @@ VERBIO/
 │   │   └── store/           # Zustand global state management
 │
 └── package.json
+```
 
 
 ## 🗺️ Logical Workflow Map
