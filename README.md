@@ -138,3 +138,62 @@ MONGO_URI=your_mongodb_connection_string
 JWT_SECRET_KEY=your_random_secret_string
 STREAM_API_KEY=your_getstream_key
 STREAM_API_SECRET=your_getstream_secret
+```
+
+## 🛠️ Installation & Setup
+
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/your-username/verbio.git
+cd verbio
+```
+
+### 2️⃣ Backend Setup
+```bash
+cd Backend
+npm install
+npm run dev
+```
+
+### 3️⃣ Frontend Setup
+```bash
+cd Frontend/app
+npm install
+npm run dev
+```
+
+## 🛡️ Security Implementation
+
+### 🔒 CORS Policy
+- Configured to allow only trusted origins:
+  - Localhost
+  - Render
+  - Netlify
+
+---
+
+### 🛑 XSS Protection
+- JWT tokens are stored in **HTTP-only cookies**
+- Prevents access from client-side scripts
+
+---
+
+### 🚧 Route Guards
+- `protectRoute` middleware validates JWT integrity
+- Blocks unauthorized access to protected routes
+
+---
+
+## 📌 Status
+
+- 🚧 Actively developed  
+- ✅ Core features implemented  
+- 🔜 Performance optimizations & scalability improvements planned
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome.  
+Feel free to open a pull request or raise an issue.
+
