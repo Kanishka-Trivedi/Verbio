@@ -634,15 +634,11 @@ const useUpdateProfile = () => {
 ----------------------------------- */
 const useUploadProfilePic = () => {
   return useMutation({
-    mutationFn: async (formData) => {
-      const response = await axios.post(
-        `${API}/users/profile-pic`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-          withCredentials: true,
-        }
-      );
+    mutationFn: async (data) => {
+      // Send data (which is { profilePic: base64String }) as JSON
+      const response = await axios.post(`${API}/users/profile-pic`, data, {
+        withCredentials: true,
+      });
       return response.data;
     },
   });
@@ -726,26 +722,30 @@ export default function Profile() {
      Upload profile picture
   ----------------------------------- */
   const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
-    setSelectedImage(URL.createObjectURL(file));
+  // 1. Preview the image locally
+  setSelectedImage(URL.createObjectURL(file));
 
-    const formData = new FormData();
-    formData.append("profilePic", file);
+  // 2. Convert File to Base64 string
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onloadend = async () => {
+    const base64String = reader.result;
 
     try {
-      await uploadPic.mutateAsync(formData);
-
-      // ✅ Refresh auth user data
+      // 3. Send as a standard JSON object, NOT FormData
+      await uploadPic.mutateAsync({ profilePic: base64String });
+      
       queryClient.invalidateQueries(["authUser"]);
-
       alert("Profile picture updated!");
     } catch (err) {
       console.error("Image upload failed", err);
       alert("Image upload failed");
     }
   };
+};
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
