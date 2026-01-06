@@ -1,17 +1,4 @@
 # 🌐 Verbio 
-
-<p align="center">
-  <img src="Frontend/app/dist/assets/Screenshot%202026-01-05%20133808.png" width="260" />
-  <img src="Frontend/app/dist/assets/Screenshot%202026-01-05%20133832.png" width="260" />
-  <img src="Frontend/app/dist/assets/Screenshot%202026-01-05%20134201.png" width="260" />
-  <img src="Frontend/app/dist/assets/Screenshot%202026-01-05%20134219.png" width="260" />
-  <img src="Frontend/app/dist/assets/Screenshot%202026-01-05%20142312.png" width="260" />
-  <img src="Frontend/app/dist/assets/Screenshot%202026-01-06%20134052.png" width="260" />
-  <img src="Frontend/app/dist/assets/Screenshot%202026-01-06%20134133.png" width="260" />
-  <img src="Frontend/app/dist/assets/Screenshot%202026-01-06%20134310.png" width="260" />
-  <img src="Frontend/app/dist/assets/Screenshot%202026-01-06%20134317.png" width="260" />
-</p>
-
 ### AI-Powered Language Exchange & Social Hub
 
 Verbio is a high-performance, full-stack **language exchange platform** built on the **MERN stack**.  
