@@ -24,7 +24,6 @@
   <img src="Frontend/app/dist/assets/Screenshot%202026-01-06%20134133.png" width="260" />
   <img src="Frontend/app/dist/assets/Screenshot%202026-01-06%20134310.png" width="260" />
   <img src="Frontend/app/dist/assets/Screenshot%202026-01-06%20134317.png" width="260" />
->>>>>>> e5296f6d0ba08b8c207e18b3088e1997e5b978bc
 </p>
 
 ### AI-Powered Language Exchange & Social Hub
