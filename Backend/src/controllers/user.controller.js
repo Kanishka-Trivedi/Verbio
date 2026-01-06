@@ -1,5 +1,7 @@
 import User from "../models/User.js";
 import FriendRequest from "../models/FriendRequest.js";
+import cloudinary from "../lib/cloudinary.js";
+import { streamClient } from "../lib/stream.js";
 
 export async function getRecommendedUsers(req, res) {
   try {
@@ -173,22 +175,35 @@ export const updateProfile = async (req, res) => {
 // POST /api/users/profile-pic
 export const uploadProfilePic = async (req, res) => {
   try {
+    const { profilePic } = req.body;
     const userId = req.user._id;
-    const base64Image = req.body.profilePic;
 
-    if (!base64Image) {
-      return res.status(400).json({ message: "No image provided." });
-    }
+    if (!profilePic) return res.status(400).json({ message: "No image provided" });
 
-    const user = await User.findByIdAndUpdate(
+    // 1. Upload Base64 to Cloudinary
+    const uploadResponse = await cloudinary.uploader.upload(profilePic, {
+      folder: "verbio_profiles", // Organizes your Cloudinary media
+    });
+
+    const imageUrl = uploadResponse.secure_url;
+
+    // 2. Update MongoDB with the URL instead of the Base64 string
+    const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { profilePic: base64Image },
+      { profilePic: imageUrl },
       { new: true }
     );
 
-    res.status(200).json({ message: "Profile picture updated", user });
+    // 3. Sync with Stream using the lightweight URL
+    await streamClient.upsertUser({
+      id: userId.toString(),
+      image: imageUrl,
+      name: updatedUser.fullName,
+    });
+
+    res.status(200).json(updatedUser);
   } catch (error) {
-    console.error("Profile pic upload error:", error);
-    res.status(500).json({ message: "Failed to upload profile picture." });
+    console.error("Cloudinary upload error:", error);
+    res.status(500).json({ message: "Upload failed" });
   }
 };

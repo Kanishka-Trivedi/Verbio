@@ -170,10 +170,12 @@ const ChatPage = () => {
       try {
         const client = StreamChat.getInstance(STREAM_API_KEY);
 
+        // ChatPage.jsx
         await client.connectUser(
           {
             id: authUser._id,
             name: authUser.fullName,
+            // Stream will automatically use the 'image' URL you pushed from the backend
           },
           tokenData.token
         );

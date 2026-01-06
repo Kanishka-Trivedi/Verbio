@@ -8,7 +8,7 @@ if(!apiKey || !apiSecret) {
     console.error("Stream API key or Secret must be set in environment variables");
 }
 
-const streamClient = StreamChat.getInstance(apiKey, apiSecret);
+export const streamClient = StreamChat.getInstance(apiKey, apiSecret);
 
 export const upsertStreamUser = async (userData) => {
     try {
