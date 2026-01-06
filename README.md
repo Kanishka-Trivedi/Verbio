@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🌐 Verbio  
 
 <p align="center">
@@ -10,6 +11,20 @@
   <img src="screenshots/assets/Screenshot 2026-01-06 134133.png" width="260" />
   <img src="screenshots/assets/Screenshot 2026-01-06 134310.png" width="260" />
   <img src="screenshots/assets/Screenshot 2026-01-06 134317.png" width="260" />
+=======
+# 🌐 Verbio 
+
+<p align="center">
+  <img src="Frontend/app/dist/assets/Screenshot%202026-01-05%20133808.png" width="260" />
+  <img src="Frontend/app/dist/assets/Screenshot%202026-01-05%20133832.png" width="260" />
+  <img src="Frontend/app/dist/assets/Screenshot%202026-01-05%20134201.png" width="260" />
+  <img src="Frontend/app/dist/assets/Screenshot%202026-01-05%20134219.png" width="260" />
+  <img src="Frontend/app/dist/assets/Screenshot%202026-01-05%20142312.png" width="260" />
+  <img src="Frontend/app/dist/assets/Screenshot%202026-01-06%20134052.png" width="260" />
+  <img src="Frontend/app/dist/assets/Screenshot%202026-01-06%20134133.png" width="260" />
+  <img src="Frontend/app/dist/assets/Screenshot%202026-01-06%20134310.png" width="260" />
+  <img src="Frontend/app/dist/assets/Screenshot%202026-01-06%20134317.png" width="260" />
+>>>>>>> e5296f6d0ba08b8c207e18b3088e1997e5b978bc
 </p>
 
 ### AI-Powered Language Exchange & Social Hub
