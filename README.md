@@ -1,23 +1,32 @@
 # 🌐 Verbio  
 
-<p align="center">
-  <img src="screenshots/Screenshot 2026-01-05 133808.png" width="260" />
-  <img src="screenshots/Screenshot 2026-01-05 133832.png" width="260" />
-  <img src="screenshots/Screenshot 2026-01-05 134201.png" width="260" />
-  <img src="screenshots/Screenshot 2026-01-05 134219.png" width="260" />
-  <img src="screenshots/Screenshot 2026-01-05 142312.png" width="260" />
-  <img src="screenshots/Screenshot 2026-01-06 134052.png" width="260" />
-  <img src="screenshots/Screenshot 2026-01-06 134133.png" width="260" />
-  <img src="screenshots/Screenshot 2026-01-06 134310.png" width="260" />
-  <img src="screenshots/Screenshot 2026-01-06 134317.png" width="260" />
-<p>
-
 ### AI-Powered Language Exchange & Social Hub
 
 Verbio is a high-performance, full-stack **language exchange platform** built on the **MERN stack**.  
 It enables real-time global connections through intelligent user recommendations, secure authentication, and integrated video & chat capabilities.
 
 ---
+
+## Images of my Project for better Visualization
+
+<p align="center">
+  <img src="screenshots/Screenshot 2026-01-05 133808.png" width="360" />
+  <img src="screenshots/Screenshot 2026-01-05 133832.png" width="360" />
+  <img src="screenshots/Screenshot 2026-01-05 134201.png" width="360" />
+</p>
+
+<p align="center">
+  <img src="screenshots/Screenshot 2026-01-05 134219.png" width="360" />
+  <img src="screenshots/Screenshot 2026-01-05 142312.png" width="360" />
+  <img src="screenshots/Screenshot 2026-01-06 134052.png" width="360" />
+</p>
+
+<p align="center">
+  <img src="screenshots/Screenshot 2026-01-06 134133.png" width="360" />
+  <img src="screenshots/Screenshot 2026-01-06 134310.png" width="360" />
+  <img src="screenshots/Screenshot 2026-01-06 134317.png" width="360" />
+</p>
+
 
 ## 🚀 Core Features
 
